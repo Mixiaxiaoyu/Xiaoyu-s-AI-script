@@ -3,7 +3,6 @@
 import c4d
 import c4d.gui
 
-
 def main():
     try:
         # 获取活动文档
@@ -39,17 +38,16 @@ def main():
 
         # 将找到的材质移到第一个材质的最前面
         for mat in materials:
-            # 先将材质从当前位置移除
-            mat.Remove()
-            # 将其插入到第一个材质的前面
-            mat.InsertBefore(first_material)
+            # 确保材质不是插入到自己之前
+            if mat != first_material:
+                # 将材质插入到第一个材质的前面
+                mat.InsertBefore(first_material)
 
         # 滚动到第一个材质
         c4d.CallCommand(100004768)  # 滚动材质列表，使其可见
 
     except Exception as e:
         print(f"发生异常: {e}")
-
 
 if __name__ == "__main__":
     main()
