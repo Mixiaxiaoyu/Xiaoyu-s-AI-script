@@ -14,6 +14,9 @@ def main():
         c4d.gui.MessageDialog("请选中对象后再使用", c4d.GEMB_OK)
         return
 
+    # 记录撤销点
+    doc.StartUndo()
+
     for obj in selected_objects:
         try:
             # 将对象转换为可编辑对象
@@ -39,6 +42,8 @@ def main():
                 offset = c4d.Vector(0, -obj.GetMg().off.y, 0)
                 offset_matrix = c4d.Matrix()
                 offset_matrix.off = offset
+                # 记录撤销操作
+                doc.AddUndo(c4d.UNDOTYPE_CHANGE, obj)
                 obj.SetMg(offset_matrix * obj.GetMg())
                 continue
             elif obj.GetType() == 5100:  # 处理对象类型 5100
@@ -52,6 +57,8 @@ def main():
                 offset = c4d.Vector(0, -obj.GetMg().off.y, 0)
                 offset_matrix = c4d.Matrix()
                 offset_matrix.off = offset
+                # 记录撤销操作
+                doc.AddUndo(c4d.UNDOTYPE_CHANGE, obj)
                 obj.SetMg(offset_matrix * obj.GetMg())
                 continue
             elif isinstance(obj, c4d.BaseObject):  # 处理一般对象类型
@@ -77,6 +84,8 @@ def main():
                 offset = c4d.Vector(0, -obj.GetMg().off.y, 0)
                 offset_matrix = c4d.Matrix()
                 offset_matrix.off = offset
+                # 记录撤销操作
+                doc.AddUndo(c4d.UNDOTYPE_CHANGE, obj)
                 obj.SetMg(offset_matrix * obj.GetMg())
                 continue
 
@@ -86,6 +95,8 @@ def main():
                 offset = c4d.Vector(0, -obj.GetMg().off.y, 0)
                 offset_matrix = c4d.Matrix()
                 offset_matrix.off = offset
+                # 记录撤销操作
+                doc.AddUndo(c4d.UNDOTYPE_CHANGE, obj)
                 obj.SetMg(offset_matrix * obj.GetMg())
                 continue
             elif len(points) == 1:
@@ -93,6 +104,8 @@ def main():
                 offset = c4d.Vector(0, -obj.GetMg().off.y, 0)
                 offset_matrix = c4d.Matrix()
                 offset_matrix.off = offset
+                # 记录撤销操作
+                doc.AddUndo(c4d.UNDOTYPE_CHANGE, obj)
                 obj.SetMg(offset_matrix * obj.GetMg())
                 continue
             else:
@@ -116,21 +129,18 @@ def main():
                 # 计算全局坐标偏移矩阵
                 offset_matrix = c4d.Matrix()
                 offset_matrix.off = offset
+                # 记录撤销操作
+                doc.AddUndo(c4d.UNDOTYPE_CHANGE, obj)
                 # 移动对象
                 obj.SetMg(offset_matrix * obj.GetMg())
         except Exception as e:
             print(f"Error occurred: {e}")
 
+    # 完成撤销操作记录
+    doc.EndUndo()
+
     c4d.EventAdd()
 
 
 if __name__ == "__main__":
-    
-    
-    
-    
-    
-    
-    
-    
     main()
